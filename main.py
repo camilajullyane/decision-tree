@@ -2,6 +2,7 @@ import pandas
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 import matplotlib.pyplot as plt
+
 # Lendo e tratando o arquivo CSV
 df = pandas.read_csv("train.csv")
 d = {'male': 1, 'female': 0}
