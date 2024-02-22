@@ -4,13 +4,14 @@ from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_val_score
 
+
 df = pd.read_csv("WineQT.csv")
 
 features = ["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","free sulfur dioxide","total sulfur dioxide","density","pH","sulphates","alcohol","Id"]
 variables = df[features]
 response = df["quality"]
 
-dtree = DecisionTreeClassifier(max_depth=5)
+dtree = DecisionTreeClassifier(max_depth=3)
 
 scores = cross_val_score(dtree, variables, response, cv=10)
 
@@ -18,6 +19,7 @@ print("Scores de cada execução da validação cruzada: ", scores)
 print("Média dos scores: ", scores.mean())
 
 dtree = dtree.fit(variables, response)
-tree.plot_tree(dtree, feature_names=features)
+tree.plot_tree(dtree, feature_names=features, filled=True)
+
 
 plt.show()
