@@ -12,7 +12,6 @@ response = df["quality"]
 
 dtree = DecisionTreeClassifier(max_depth=5)
 
-# Aplicando a validação cruzada de 10-folds
 scores = cross_val_score(dtree, variables, response, cv=10)
 
 print("Scores de cada execução da validação cruzada: ", scores)
