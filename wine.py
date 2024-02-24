@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_val_score
+import graphviz
 
 def changeField(quality):
   if quality <= 4:
@@ -11,6 +12,26 @@ def changeField(quality):
     return 1
   if quality >= 8:
     return 2
+
+def showScore(scores):
+  for c, score in enumerate(scores):
+    print(f'{c + 1}º teste: {(score * 100):.2f}%')
+  print(f'Média: {(scores.mean() * 100):.2f}%')
+
+def convertResult(result):
+  if result[0] == 0:
+    return 'ruim'
+  if result[0] == 1:
+    return 'boa'
+  if result[0] == 2:
+    return 'ótima'
+  
+def create_tree_pdf(dtree, features):
+    dot_data = tree.export_graphviz(dtree, out_file=None, 
+    feature_names=features, filled=True, rounded=True,  
+    special_characters=True)  
+    graph = graphviz.Source(dot_data)  
+    graph.render("decision_tree", format='pdf') 
 
 def CreatTree():
   df = pd.read_csv("WineQT.csv")
@@ -25,7 +46,7 @@ def CreatTree():
   dtree = dtree.fit(variables, response)
   tree.plot_tree(dtree, feature_names=features, filled=True)
 
-  return dtree, scores
+  return dtree, scores, features
 
 def validationInput(txt):
   while True:
@@ -42,27 +63,27 @@ def menu():
   print("2 - Mostrar a precisão do modelo")
   print("3 - Sair")
 
-dtree, scores = CreatTree()
+dtree, scores, features = CreatTree()
 while True:
   menu()
   input_user = validationInput("Digite a opção desejada: ")
   match(input_user):
     case 0:
         print('Digite os valores das variáveis para teste: ')
-        fixed_acidity = validationInput("")
-        volatile_acidity = validationInput("")
-        citric_acid = validationInput("")
-        residual_sugar = validationInput("")
-        chlorides = validationInput("")
-        density = validationInput("")
-        pH = validationInput("")
-        sulphates = validationInput("")
-        alcohol = validationInput("")
+        fixed_acidity = validationInput("Acidez fixa: ")
+        volatile_acidity = validationInput("Acidez volátil: ")
+        citric_acid = validationInput("Ácido cítrico: ")
+        residual_sugar = validationInput("Açúcar residual: ")
+        chlorides = validationInput("Cloretos: ")
+        density = validationInput("Densidade: ")
+        pH = validationInput("Ph: ")
+        sulphates = validationInput("Sulfatos: ")
+        alcohol = validationInput("Álcool: ")
         prediction = dtree.predict([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides, density, pH, sulphates, alcohol]])
+        print(f'A qualidade do vinho é {convertResult(prediction)}')
     case 1:
-      plt.show()
+      create_tree_pdf(dtree, features)
     case 2:
-      print("Scores de cada execução da validação cruzada: ", scores)
-      print("Média dos scores: ", scores.mean())
+      showScore(scores)
     case 3:
       break
