@@ -4,10 +4,20 @@ from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_val_score
 
+def changeField(quality):
+  if quality <= 4:
+    return 0
+  if quality > 4 and quality <= 7:
+    return 1
+  if quality >= 8:
+    return 2
+
 def CreatTree():
   df = pd.read_csv("WineQT.csv")
-
-  features = ["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","free sulfur dioxide","total sulfur dioxide","density","pH","sulphates","alcohol"]
+  
+  df['quality'] = df['quality'].apply(changeField)
+  
+  features = ["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","density","pH","sulphates","alcohol"]
   variables = df[features]
   response = df["quality"]
   dtree = DecisionTreeClassifier(max_depth=3)
@@ -16,7 +26,7 @@ def CreatTree():
   tree.plot_tree(dtree, feature_names=features, filled=True)
 
   return dtree, scores
-  
+
 def validationInput(txt):
   while True:
     try:
@@ -44,13 +54,11 @@ while True:
         citric_acid = validationInput("")
         residual_sugar = validationInput("")
         chlorides = validationInput("")
-        free_sulfur_dioxide = validationInput("")
-        total_sulfur_dioxide = validationInput("")
         density = validationInput("")
         pH = validationInput("")
         sulphates = validationInput("")
         alcohol = validationInput("")
-        prediction = dtree.predict([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides, free_sulfur_dioxide, total_sulfur_dioxide, density, pH, sulphates, alcohol]])
+        prediction = dtree.predict([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides, density, pH, sulphates, alcohol]])
     case 1:
       plt.show()
     case 2:
