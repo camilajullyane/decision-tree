@@ -41,7 +41,7 @@ def CreatTree():
   features = ["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","density","pH","sulphates","alcohol"]
   variables = df[features]
   response = df["quality"]
-  dtree = DecisionTreeClassifier(max_depth=3)
+  dtree = DecisionTreeClassifier(max_depth=5, min_samples_leaf=57)
   scores = cross_val_score(dtree, variables, response, cv=10)
   dtree = dtree.fit(variables, response)
   tree.plot_tree(dtree, feature_names=features, filled=True)
